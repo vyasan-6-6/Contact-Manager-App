@@ -1,11 +1,12 @@
  
 const Header = () => {
   return (
-    <div className='ui fixed menu'>
-       <div className="ui container center">
-        <h2>contact Manager</h2>
-       </div>
-    </div>
+   <div className="ui fixed menu">
+  <div className="ui container center aligned">
+    <h2>  Contact Manager</h2>
+  </div>
+</div>
+
   )
 }
 

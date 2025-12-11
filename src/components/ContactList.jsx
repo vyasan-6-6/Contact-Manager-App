@@ -7,4 +7,4 @@
    )
  }
  
- export default ContactList
+ export default ContactList;
