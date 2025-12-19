@@ -5,6 +5,7 @@ import AddContact from "./AddContact";
 import api from "../api/contacts"
 import ContactList from "./ContactList";
 import ContactDetail from "./ContactDetail";
+import EditConatact from "./EditContact";
 
 function App() {
   const LOCAL_STORAGE_KEY = "contacts";
@@ -17,7 +18,22 @@ function App() {
   };
 
 
+const updateContactHandler = async(co)=>{
+  try {
+      
+const response = await api.put(`/contacts/${co.id}`,co);
+ console.log(response.data);
+ 
+ const contact = await retrivedContacts();
 
+ setContacts(contact);
+  } catch (error) {
+    console.log(error.message);
+    
+  }
+
+    
+}
 
   const addContactHandler = async(co) => {
     const request = {
@@ -34,8 +50,7 @@ function App() {
   };
 
   const removeContactHandler = async(id) => {
-    // const newContactLists = contacts.filter((con)=>con.id !== id);
-    // setContacts(newContactLists);
+  
     await api.delete(`/contacts/${id}`);
     setContacts((pre) => pre.filter((c) => c.id !== id));
   };
@@ -80,6 +95,9 @@ function App() {
       <ContactDetail   contacts={contacts}/>
    }/>
 
+<Route path="/contact/edit/:id" element={
+  <EditConatact contacts={contacts} onUpdate={updateContactHandler}/>
+}/>
     
         
       </Routes>
