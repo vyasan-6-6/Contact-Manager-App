@@ -11,10 +11,46 @@ function App() {
   const LOCAL_STORAGE_KEY = "contacts";
 
   const [contacts, setContacts] = useState([]);
+  const [searchTerm, setSearchterm] = useState('');
+  const [ searchResult,setSearchresult] = useState([]);
   //retrivedContacts
   const retrivedContacts = async()=>{
     const response = await api.get("/contacts");
     return response.data;
+  };
+
+
+
+  const addContactHandler = async(co) => {
+    const existEmail = contacts.some(contact =>   contact.email.toLowerCase() === co.email.toLowerCase()
+     );
+
+    if(existEmail){
+      alert("This email already exist!")
+      return ;
+    }
+    const request = {
+      ...co,
+      id:`${Date.now()}-${Math.floor(Math.random() * 10000)}`
+    };
+try {
+  
+    const response = await api.post("/contacts",request)
+    console.log(response);
+    console.log(request);
+    
+    
+    setContacts((pre) => [request,...pre]);
+} catch (error) {
+console.log("Error adding contacts",error);
+
+}
+  };
+
+  const removeContactHandler = async(id) => {
+  
+    await api.delete(`/contacts/${id}`);
+    setContacts((pre) => pre.filter((c) => c.id !== id));
   };
 
 
@@ -30,49 +66,33 @@ const response = await api.put(`/contacts/${co.id}`,co);
   } catch (error) {
     console.log(error.message);
     
-  }
+  } 
+};
 
-    
+
+const searchHandler = (searchTerm) =>{
+setSearchterm(searchTerm);
+if(searchTerm !== ''){
+  const newContactList = contacts.filter((contact)=>{
+    return  Object.values(contact).join().toLowerCase().includes(searchTerm.toLowerCase());
+  });
+  setSearchresult(newContactList);
+
+}else{
+  setSearchresult(contacts)
 }
-
-  const addContactHandler = async(co) => {
-    const request = {
-      ...co,
-      id:`${Date.now()}-${Math.floor(Math.random() * 10000)}`
-    };
-
-    const response = await api.post("/contacts",request)
-    console.log(response);
-    console.log(request);
-    
-    
-    setContacts((pre) => [request,...pre]);
-  };
-
-  const removeContactHandler = async(id) => {
-  
-    await api.delete(`/contacts/${id}`);
-    setContacts((pre) => pre.filter((c) => c.id !== id));
-  };
+}
 
 
   useEffect(()=>{
     const getAllContacts = async()=>{
       const allContacts = await retrivedContacts();
-      if(retrivedContacts) setContacts(allContacts);
+      if(retrivedContacts) setContacts(allContacts.reverse());
     };
     getAllContacts();
   },[]
   )
 
-  // useEffect(() => {
-    
-  //   try {
-  //     // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
-  //   } catch (error) {
-  //     console.log("err from localStorage setup:", error);
-  //   }
-  // }, [contacts]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -88,7 +108,7 @@ const response = await api.put(`/contacts/${co.id}`,co);
     
      <Route path="/"
      element={ 
-      <ContactList    contacts={contacts} onDelete={removeContactHandler} />
+      <ContactList   term={searchTerm} searchKeyword={searchHandler} contacts={searchTerm.length < 1 ? contacts : searchResult  } onDelete={removeContactHandler} />
    }
  />
     <Route  path="/contact/:id" element={ 

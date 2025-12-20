@@ -23,6 +23,23 @@ useEffect(()=>{
       alert("All the fields are mandatory!");
       return;
     }
+   const originalContact = contacts.find(c => String(c.id) === String(id));
+  
+  // Only check if email changed
+  if (email.toLowerCase() !== originalContact.email.toLowerCase()) {
+    const emailExists = contacts.some(c => 
+      c.email.toLowerCase() === email.toLowerCase()
+    );
+    
+       if(emailExists){
+         alert("This email already exist!")
+         return ;
+       }
+  }
+    
+
+ 
+
     onUpdate({ id,name: name.trim(), email: email.trim() });
     setName("");
     setEmail("");
