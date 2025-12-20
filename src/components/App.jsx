@@ -77,6 +77,7 @@ if(searchTerm !== ''){
     return  Object.values(contact).join().toLowerCase().includes(searchTerm.toLowerCase());
   });
   setSearchresult(newContactList);
+  
 
 }else{
   setSearchresult(contacts)
