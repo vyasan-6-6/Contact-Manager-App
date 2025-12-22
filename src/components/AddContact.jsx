@@ -1,61 +1,78 @@
-import { useState } from "react";
+ 
+ 
+import { ErrorMessage, Field, Formik,Form } from "formik";
+import validationSchema from "../formValidation/AddValidation";
 import { useNavigate } from "react-router-dom";
-
-function AddContact({ addContactHandler }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+ 
+function AddContact({ addContactHandler,contacts }) {
+  
   const navigate = useNavigate();
-
-  const add = (e) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim()) {
-      alert("All the fields are mandatory!");
-      return;
-    }
-    addContactHandler({ name: name.trim(), email: email.trim() });
-    setName("");
-    setEmail("");
-    navigate("/");
-  };
+ 
 
     return (
       <div className="mt-20 max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-semibold mb-4 text-center text-gray-800">
           Add Contact
         </h1>
+        <Formik initialValues={{name:"",email:""}}
+        validationSchema={validationSchema(contacts)} 
+        onSubmit={(values,{resetForm})=>{
+          addContactHandler(values);
+          resetForm();
+            navigate("/");
 
-        <form className="space-y-4" onSubmit={add}>
+        }}>
+
+        {({errors,touched})=>(
+          <Form  
+
+className="space-y-4" >
           <div className="flex flex-col">
             <label className="mb-1 font-medium text-gray-700">Name</label>
-            <input
+            <Field
               type="text"
               name="name"
               placeholder="Name"
-              value={name}
-              onChange={(e) => setName( e.target.value )}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+              
+  className={`border rounded-md px-3 py-2 focus:outline-none focus:ring-2 ${
+                  errors.name && touched.name
+                    ? 'border-red-500 focus:ring-red-400'
+                    : 'border-gray-300 focus:ring-blue-400'
+                }`}              />
+                <ErrorMessage
+                name="name"
+                component="p"
+                  className="text-red-500 text-sm mt-1"
+                />
           </div>
 
           <div className="flex flex-col">
             <label className="mb-1 font-medium text-gray-700">Email</label>
-            <input
+            <Field
               type="email"
               name="email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(  e.target.value )}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+   className={`border rounded-md px-3 py-2 focus:outline-none focus:ring-2 ${
+                  errors.email && touched.email
+                    ? 'border-red-500 focus:ring-red-400'
+                    : 'border-gray-300 focus:ring-blue-400'
+                }`}              />
+                 <ErrorMessage
+                name="email"
+                component="p"
+                className="text-red-500 text-sm mt-1"
+              />
           </div>
 
           <button
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md transition"
-          >
+            >
             Add
           </button>
-        </form>
+        </Form>
+        )}
+            </Formik>
       </div>
     );
   }

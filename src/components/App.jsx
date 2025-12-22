@@ -9,7 +9,7 @@ import EditConatact from "./EditContact";
 
 function App() {
     
-  const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState([]);
   //search bar states
   const [searchTerm, setSearchterm] = useState('');
   const [ searchResult,setSearchresult] = useState([]);
@@ -104,7 +104,7 @@ if(searchTerm !== ''){
      <Route path="/add"
      element={ 
   
-      <AddContact   addContactHandler={addContactHandler}/>
+      <AddContact  contacts={contacts} addContactHandler={addContactHandler}/>
      }/>
     
      <Route path="/"
