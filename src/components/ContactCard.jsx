@@ -6,6 +6,12 @@ const ContactCard = ({ contact, onDelete }) => {
   if (!contact) return null;
   const { id, name, email } = contact;
 
+  const handleDelete = ()=>{
+    if(window.confirm(`Are you sure you want to delete ${name}` )){
+      onDelete(id);
+    }
+  };
+
   return (
     <div
       className="flex justify-between items-center p-4 border-b border-gray-200"
@@ -32,7 +38,7 @@ const ContactCard = ({ contact, onDelete }) => {
     </Link>
      <button
         className="ml-auto text-red-500 hover:text-red-600"
-        onClick={() => onDelete && onDelete(id)}
+        onClick={handleDelete}
         
         >
          

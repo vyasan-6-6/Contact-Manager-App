@@ -8,9 +8,9 @@ import ContactDetail from "./ContactDetail";
 import EditConatact from "./EditContact";
 
 function App() {
-  const LOCAL_STORAGE_KEY = "contacts";
-
+    
   const [contacts, setContacts] = useState([]);
+  //search bar states
   const [searchTerm, setSearchterm] = useState('');
   const [ searchResult,setSearchresult] = useState([]);
   //retrivedContacts
