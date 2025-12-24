@@ -1,16 +1,26 @@
 import { Link } from "react-router-dom";
 import ContactCard from "./ContactCard";
+import { useContactCrud } from "../context/ContactsCrudContext";
+import { useState } from "react";
 
-const ContactList = ({ contacts, onDelete, searchKeyword, term }) => {
+const ContactList = () => {
+  const {contacts,removeContactHandler} = useContactCrud();
+   const [searchTerm, setSearchTerm] = useState('');
+
+    
+  const filteredContacts  = contacts.filter((contact)=>{
+    return  Object.values(contact).join().toLowerCase().includes(searchTerm.toLowerCase());
+  });
+  
   const handleClear = () => {
-    searchKeyword(''); // Clear search
+    setSearchTerm(''); // Clear search
   };
 
-  const renderContactsList = contacts.map((contact) => (
+  const renderContactsList = filteredContacts.map((contact) => (
     <ContactCard
       key={contact.id}
       contact={contact}
-      onDelete={onDelete}
+      onDelete={removeContactHandler}
     />
   ));
 
@@ -22,14 +32,14 @@ const ContactList = ({ contacts, onDelete, searchKeyword, term }) => {
           <input
             type="text"
             placeholder="Search by name or email..."
-            value={term}
-            onChange={(e) => searchKeyword(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          {term && (
+          {searchTerm && (
             <button 
               onClick={handleClear} 
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
@@ -40,9 +50,9 @@ const ContactList = ({ contacts, onDelete, searchKeyword, term }) => {
         </div>
 
         {/* Result Count */}
-        {term && (
+        {searchTerm && (
           <p className="text-sm text-gray-600">
-            Found {contacts.length} result{contacts.length !== 1 ? 's' : ''}
+            Found {filteredContacts .length} result{filteredContacts .length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
@@ -62,7 +72,7 @@ const ContactList = ({ contacts, onDelete, searchKeyword, term }) => {
         renderContactsList
       ) : (
         <p className="text-center py-8 text-gray-500">
-          {term ? 'No contacts found' : 'No contacts yet'}
+          {searchTerm ? 'No contacts found' : 'No contacts yet'}
         </p>
       )}
     </div>

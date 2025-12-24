@@ -1,8 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import user from '../images/useravatar.png'
+import { useContactCrud } from '../context/ContactsCrudContext';
 
 
-const ContactDetail = ({contacts}) => {
+const ContactDetail = ( ) => {
+  const {contacts} = useContactCrud();
   const {id} = useParams();
   const navigate = useNavigate();
 

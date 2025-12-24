@@ -1,13 +1,16 @@
 import { Link,   } from 'react-router-dom';
 import user from '../images/useravatar.png'
+import { useContactCrud } from '../context/ContactsCrudContext';
 
 const ContactCard = ({ contact, onDelete }) => {
+   
    
   if (!contact) return null;
   const { id, name, email } = contact;
 
   const handleDelete = ()=>{
-    if(window.confirm(`Are you sure you want to delete ${name}` )){
+    if(window.confirm(`Are you sure you want to delete ${name}
+      ?` )){
       onDelete(id);
     }
   };
@@ -15,7 +18,7 @@ const ContactCard = ({ contact, onDelete }) => {
   return (
     <div
       className="flex justify-between items-center p-4 border-b border-gray-200"
-      key={id}
+     
     >
       <img
         src={user}
@@ -36,16 +39,12 @@ const ContactCard = ({ contact, onDelete }) => {
       Edit
     </button>
     </Link>
-     <button
-        className="ml-auto text-red-500 hover:text-red-600"
-        onClick={handleDelete}
-        
+        <button
+          onClick={handleDelete}
+          className="p-1.5 text-white bg-red-500 hover:bg-red-600 rounded-sm"
         >
-         
-      <i className="w-6 h-6 bg-red-500 hover:bg-red-600 rounded-sm inline-block"  ></i>
-     
-
-      </button>
+          🗑
+        </button>
         </div>
     </div>
   )

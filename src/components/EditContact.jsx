@@ -2,10 +2,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import validationSchema from "../formValidation/AddValidation";
+import { useContactCrud } from "../context/ContactsCrudContext";
  
 
-function  EditConatact({ onUpdate , contacts }) {
-  
+function  EditConatact() {
+  const {contacts,updateContactHandler} = useContactCrud();
   const {id} = useParams();
   const navigate = useNavigate();
   const [initialValue,setInitialValue] = useState({name:"",email:""});
@@ -27,8 +28,7 @@ useEffect(()=>{
                validationSchema={validationSchema(contacts,id)}
                enableReinitialize={true}
                onSubmit={(values,{resetForm})=>{
-                if(!values) return true;
-               onUpdate({id,...values});
+               updateContactHandler({id,...values});
                 resetForm();
                 navigate('/')
                }}
@@ -82,7 +82,7 @@ useEffect(()=>{
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md transition"
             >
-            Update
+            Update  Contact
           </button>
         </Form>
 )}

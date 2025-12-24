@@ -3,10 +3,11 @@
 import { ErrorMessage, Field, Formik,Form } from "formik";
 import validationSchema from "../formValidation/AddValidation";
 import { useNavigate } from "react-router-dom";
+import { useContactCrud } from "../context/ContactsCrudContext";
  
-function AddContact({ addContactHandler,contacts }) {
-  
+function AddContact() {
   const navigate = useNavigate();
+  const {contacts,addContactHandler} = useContactCrud();
  
 
     return (
