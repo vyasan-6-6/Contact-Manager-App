@@ -1,6 +1,5 @@
 import { Link,   } from 'react-router-dom';
 import user from '../images/useravatar.png'
-import { useContactCrud } from '../context/ContactsCrudContext';
 
 const ContactCard = ({ contact, onDelete }) => {
    
