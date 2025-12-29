@@ -17,12 +17,14 @@ function EditConatact() {
         }
     }, [id, contacts]);
 
+    const othercontacts = contacts.filter(contact => contact.id !== id).map(contact => contact.email);
+
     return (
         <div className="mt-20 max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
             <h1 className="text-2xl font-semibold mb-4 text-center text-gray-800">Edit Contact</h1>
             <Formik
                 initialValues={initialValue}
-                validationSchema={validationSchema(contacts, id)}
+                validationSchema={validationSchema(othercontacts)}
                 enableReinitialize={true}
                 onSubmit={(values, { resetForm }) => {
                     updateContactHandler({ id, ...values });
